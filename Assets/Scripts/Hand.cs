@@ -22,9 +22,7 @@ public class Hand : MonoBehaviour
         v2card = new Vector2(Screen.height * 0.146f,Screen.height * 0.2f);
         cardPrefab.GetComponent<RectTransform>().sizeDelta = v2card;
         backPrefab.GetComponent<RectTransform>().sizeDelta = v2card;
-        betweenSmall = v2card.x * 0.3f;
-
-        sizex = GetComponent<RectTransform>().rect.width * 0.5f; 
+        sizex = (GetComponent<RectTransform>().rect.width + v2card.x);// * 0.5f; 
         StartCoroutine(CreateCards()); 
     }
 
@@ -128,8 +126,7 @@ public class Hand : MonoBehaviour
         
         BetweenCalc();
 
-        lastx = 0;
-        int i = 0;
+        lastx = 0; 
         foreach (ListedCard card in cards)
         {
             if (!card.script.unable)
@@ -146,15 +143,13 @@ public class Hand : MonoBehaviour
                     lastx += betweenSmall;
                     card.im.color = Color.gray;
                     card.btn.enabled = false;
-                }
-                i++;
+                } 
             }
-        }
+        } 
     }
 
     private void BetweenCalc()
-    {
-
+    { 
         unableCount = 0;
         ableCount = 0;
         foreach (ListedCard card in cards)
@@ -167,11 +162,15 @@ public class Hand : MonoBehaviour
         }
         if (ableCount == 0) { S.win = true; }
 
-        betweenBig = sizex - unableCount * betweenSmall;
-        if (betweenBig > betweenSmall * 2.5f) { betweenBig = betweenSmall * 2.5f; }
-        if (betweenBig < betweenSmall) { betweenBig = betweenSmall * 1.5f; }
+        betweenSmall = v2card.x * 0.3f;
+        betweenBig = (sizex - unableCount * v2card.x * 0.3f) / ableCount;
+        if (betweenBig > v2card.x * 0.3f * 2.5f) { betweenBig = v2card.x * 0.3f * 2.5f;  betweenSmall = (sizex - ableCount * betweenBig) / unableCount; }
+        if (betweenBig < v2card.x * 0.3f) { betweenBig = v2card.x * 0.3f * 1.5f; }
+        
+        if(betweenSmall > v2card.x) { betweenSmall = v2card.x; }
 
-        sdvig = (betweenBig * ableCount + betweenSmall * unableCount) * 0.5f;
+        sdvig = ((betweenBig * ableCount + betweenSmall * unableCount) * 0.5f) ;
+        sdvig -= v2card.x * 0.3f; 
     }
     IEnumerator DelayBackDestroy()
     {

@@ -7,7 +7,7 @@ using TMPro;
 public class Mainx : MonoBehaviour
 {
     public RectTransform header, fon_select_Button, pause_Button;
-    public GameObject pausePanel, stopPanel, hand;
+    public GameObject hand, pausePanel, stopPanel, continue_Button;
     public TMP_Text score, scoreResult;
      void Awake()
     {
@@ -45,6 +45,7 @@ public class Mainx : MonoBehaviour
         score.text = S.score.ToString();
         if(S.win)
         {
+            if(S.score == 13) { continue_Button.SetActive(false); }
             S.win = false;
             StartCoroutine("DelayWin");
         }

@@ -10,7 +10,7 @@ public class Card : MonoBehaviour
     private Button button;
 
     private void Start()
-    {
+    { 
         button = GetComponent<Button>();
     }
 
